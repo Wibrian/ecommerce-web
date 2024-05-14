@@ -6,13 +6,15 @@ const path = require("path");
 const cors = require("cors");
 const { type } = require("os");
 
+require("dotenv").config();
+
 const port = 4000;
 const app = express();
 
 app.use(express.json());
 app.use(cors());
 
-mongoose.connect("mongodb+srv://sipasaradmin:spsr2024@sipasar.rfppxrb.mongodb.net/sipasar-collection?retryWrites=true&w=majority&appName=sipasar");
+mongoose.connect(process.env.DB_HOST);
 
 app.get("/", (req, res) => {
   res.send("Express App is running");
