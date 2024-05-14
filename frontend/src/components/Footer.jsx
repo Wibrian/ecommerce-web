@@ -1,15 +1,18 @@
 /* eslint-disable no-extra-semi */
-import { Link } from "react-router-dom"
-import FOOTER_LINKS, { FOOTER_CONTACT_INFO, SOCIALS } from "../assets/files/data"
+import { Link } from "react-router-dom";
+import FOOTER_LINKS, { FOOTER_CONTACT_INFO, SOCIALS } from "../assets/files/data";
 
 export default function Footer() {
   return (
     <footer className="flexCenter pb-24 pt-20 ">
       <div className="max_padd_container flex w-full flex-col gap-14">
         <div className="flex flex-col items-start justify-center gap-[10%] md:flex-row">
-          <Link to="/" className="mb-10 bold-20 ">
-            Shoppee
-          </Link>
+          <div>
+            <Link to="/" className="mb-10 bold-20 text-secondary">
+              SiPasar
+            </Link>
+            <p>Hassle-free Shopping</p>
+          </div>
           <div className="flex flex-wrap gap-8 sm:justify-between md:flex-1">
             {FOOTER_LINKS.map((col) => (
               <FooterColumn title={col.title} key={col.title}>
@@ -49,7 +52,7 @@ export default function Footer() {
         <p className="text-center">2024 Shoppe | All Rights Reserved.</p>
       </div>
     </footer>
-  )
+  );
 }
 
 function FooterColumn({ title, children }) {
@@ -58,5 +61,5 @@ function FooterColumn({ title, children }) {
       <h4 className="bold-18 whitespace-nowrap">{title}</h4>
       {children}
     </div>
-  )
+  );
 }

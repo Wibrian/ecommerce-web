@@ -55,12 +55,12 @@ export default function CartItems() {
             <hr />
             <div className="flexBetween py-4">
               <h4 className="medium-16">Shipping Fee:</h4>
-              <h4 className="text-gray-30 font-semibold">Free</h4>
+              <h4 className="text-gray-30 font-semibold">${10.5}</h4>
             </div>
             <hr />
             <div className="flexBetween py-4">
               <h4 className="bold-18">Total:</h4>
-              <h4 className="bold-18">${getTotalCartAmount()}</h4>
+              <h4 className="bold-18">${getTotalCartAmount() + 10.5}</h4>
             </div>
           </div>
         </div>

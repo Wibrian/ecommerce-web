@@ -14,7 +14,7 @@ export default function Header() {
   const { getTotalCartItems } = useContext(ShopContext)
 
   return (
-    <header className="fixed top-0 left-0 m-auto max_padd_container w-full bg-white ring-1 ring-slate-900/5 z-10 ">
+    <header className="fixed top-0 left-0 m-auto max_padd_container w-full bg-white ring-1 ring-slate-900/5 z-20 ">
       <div className="px-4 flexBetween py-3 max-xs:px-2">
         <div>
           <Link>
@@ -22,7 +22,7 @@ export default function Header() {
           </Link>
         </div>
         {/* Navbar Desktop */}
-        <Navbar containerStyle={"hidden md:flex gap-x-5 xl:gap-x-10 medium-15"} />
+        <Navbar containerStyle={"hidden md:flex gap-x-5 xl:gap-x-10 medium-15 z-30"} />
         {/* Navbar Mobile */}
         <Navbar
           containerStyle={`${
