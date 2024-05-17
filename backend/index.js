@@ -5,6 +5,7 @@ const multer = require("multer");
 const path = require("path");
 const cors = require("cors");
 const { type } = require("os");
+const { error } = require("console");
 
 require("dotenv").config();
 
@@ -120,6 +121,86 @@ app.get("/allproducts", async (req, res) => {
   let products = await Product.find({});
   console.log("All Products Fetched");
   res.send(products);
+});
+
+// user model
+const User = mongoose.model("User", {
+  name: {
+    type: String,
+  },
+  email: {
+    type: String,
+    unique: true,
+  },
+  password: {
+    type: String,
+  },
+  carData: {
+    type: Object,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+// register user
+app.post("/signup", async (req, res) => {
+  let check = await User.findOne({ email: req.body.email });
+  if (check) {
+    return res.status(400).json({ success: false, errors: "This email is already used!" });
+  }
+  let cart = {};
+  for (let i = 0; i < 300; i++) {
+    cart[i] = 0;
+  }
+
+  const user = new User({
+    name: req.body.username,
+    email: req.body.email,
+    password: req.body.password,
+    carData: cart,
+  });
+  await user.save();
+
+  const data = {
+    user: {
+      id: user.id,
+    },
+  };
+
+  const token = jwt.sign(data, "secret_ecom");
+  res.json({ success: true, token });
+});
+
+// user login
+app.post("/login", async (req, res) => {
+  let user = await User.findOne({ email: req.body.email });
+  if (user) {
+    const passMatch = req.body.password === user.password;
+    if (passMatch) {
+      const data = {
+        user: {
+          id: user.id,
+        },
+      };
+      const token = jwt.sign(data, "secret_ecom");
+      res.json({ success: true, token });
+    } else {
+      res.json({ success: false, errors: "Wrong password" });
+    }
+  } else {
+    res.json({ success: false, errors: "wrong email address" });
+  }
+});
+
+// lates product endpoint
+
+app.get("/newcollections", async (req, res) => {
+  let products = await Product.find({});
+  let newcollection = products.slice(1).slice(-8);
+  console.log("New Collection Fetched");
+  res.send(newcollection);
 });
 
 app.listen(port, (error) => {
