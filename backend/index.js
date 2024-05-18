@@ -18,7 +18,7 @@ app.use(cors());
 mongoose.connect(process.env.DB_HOST);
 
 app.get("/", (req, res) => {
-  res.send("Express App is running");
+  res.send("SiPasar Express App is running");
 });
 
 const storage = multer.diskStorage({
@@ -201,6 +201,57 @@ app.get("/newcollections", async (req, res) => {
   let newcollection = products.slice(1).slice(-8);
   console.log("New Collection Fetched");
   res.send(newcollection);
+});
+
+// popular product
+
+app.get("/popularproducts", async (req, res) => {
+  let products = await Product.find({ category: "men" });
+  let popularproducts = products.slice(0, 4);
+  console.log("Popular Product Fetched");
+  res.send(popularproducts);
+});
+
+// middleware
+const fetchUser = async (req, res, next) => {
+  const token = req.header("auth-token");
+  if (!token) {
+    res.status(401).send({ errors: "Please authenticate using valid login!" });
+  } else {
+    try {
+      const data = jwt.verify(token, "secret_ecom");
+      req.user = data.user;
+      next();
+    } catch {
+      res.status(401).send({ errors: "Please authenticate using valid token!" });
+    }
+  }
+};
+
+// cart endpoint
+app.post("/addtocart", fetchUser, async (req, res) => {
+  console.log("Added", req.body.temId);
+  let userData = await User.findOne({ _id: req.user.id });
+  userData.carData[req.body.temId] += 1;
+  await User.findOneAndUpdate({ _id: req.user.id }, { carData: userData.carData });
+  // res.send("Added");
+});
+
+// remove from cart
+app.post("/removefromcart", fetchUser, async (req, res) => {
+  console.log("Removed", req.body.temId);
+  let userData = await User.findOne({ _id: req.user.id });
+  if (userData.carData[req.body.temId] > 0);
+  userData.carData[req.body.temId] -= 1;
+  await User.findOneAndUpdate({ _id: req.user.id }, { carData: userData.carData });
+  // res.send("Removed");
+});
+
+// get cart data
+app.post("/getcart", fetchUser, async (req, res) => {
+  console.log("Get Cart");
+  let userData = await User.findOne({ _id: req.user.id });
+  res.json(userData.carData);
 });
 
 app.listen(port, (error) => {
