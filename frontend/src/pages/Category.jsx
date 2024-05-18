@@ -1,8 +1,12 @@
-import { MdOutlineKeyboardArrowDown } from "react-icons/md"
-import all_products from "../assets/files/all_products"
-import Item from "../components/Item"
+import { MdOutlineKeyboardArrowDown } from "react-icons/md";
+// import all_products from "../assets/files/all_products"
+import Item from "../components/Item";
+import { useContext } from "react";
+import { ShopContext } from "../context/ShopContext";
 
 export default function Category({ category, banner }) {
+  const { all_product } = useContext(ShopContext);
+
   return (
     <section className="max_padd_container py-12 xl:py-28">
       <div>
@@ -17,15 +21,15 @@ export default function Category({ category, banner }) {
         </div>
       </div>
       <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-        {all_products.map((item) => {
+        {all_product.map((item) => {
           if (category === item.category) {
-            return <Item key={item.id} id={item.id} image={item.image} name={item.name} new_price={item.new_price} old_price={item.old_price} />
+            return <Item key={item.id} id={item.id} image={item.image} name={item.name} new_price={item.new_price} old_price={item.old_price} />;
           }
         })}
       </div>
       <div className="mt-16 text-center">
-        <button className="btn_white_rounded">Load More</button>
+        <button className="btn_dark_rounded">Load More</button>
       </div>
     </section>
-  )
+  );
 }
